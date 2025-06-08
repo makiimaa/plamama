@@ -1,0 +1,52 @@
+@using final.Models
+@model IList<viewEU>
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sach cac bai thuc hanh.</h2>
+
+        <p>
+            <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Exer" asp-action="Create"><i class="bi bi-file-earmark-text me-1"></i>Add an Exercise</a>
+            <section class="section dashboard">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+                            <div class="card-body mt-4">
+                                <table class="table table-borderless datatable">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-1 text-center">#</th>
+                                            <th class="col-2 text-center">FILE</th>
+                                            <th class="col-1 text-center">UID</th>
+                                            <th class="col-3 text-center">EID</th>
+                                            <th class="col-2 text-center">SubmitDate</th>
+                                            <th class="col-1 text-center">Status</th>
+                                            <th class="col-2 text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center" scope="row">@item.EUID</td>
+                                                <td class="text-left text-primary" scope="row"><a asp-area="Admin" asp-controller="EU" asp-action="Details" asp-route-id="@item.EUID">@item.FilePath</a></td>
+                                                <td class="text-center" scope="row">@item.FullName</td>
+                                                <td class="text-center" scope="row">@item.ExerName</td>
+                                                <td class="text-center" scope="row">@item.SubmitDate</td>
+                                                <td class="text-center" scope="row">@item.IsAcepted</td>
+                                                <td class="text-center" scope="row">
+                                                    <a asp-area="Admin" asp-controller="Exer" asp-action="Edit" asp-route-id="@item.EUID" class="btn btn-primary btn-sm" title="Edit the Exercise"><i class="bi bi-pencil"></i></a>
+                                                    <a asp-area="Admin" asp-controller="Exer" asp-action="Delete" asp-route-id="@item.EUID" class="btn btn-danger btn-sm" title="Delete the Exercise"><i class="bi bi-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </p>
+    </div>
+</main>

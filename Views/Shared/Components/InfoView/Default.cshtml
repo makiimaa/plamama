@@ -1,0 +1,50 @@
+@using final.Models
+@model IList<tblUsers>
+@using final.Utilities
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>About</h2>
+        <p>Your private Information is showing here. You can change by the change button below.</p>
+    </div><!-- End Section Title -->
+    @foreach (var uu in Model.Where(m => m.UserId == @Functions._UserId))
+    {
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="row gy-4 justify-content-center">
+                <div class="col-lg-4">
+                    <img src="assets/img/@uu.Images" class="img-fluid" alt="" style="border-radius: 12px;">
+                </div>
+                <div class="col-lg-8 content">
+                    <h2>Your INFORMATION.</h2>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><i class="bi bi-chevron-right"></i> <strong>username:</strong> <span>@uu.UserName</span></li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Fullname:</strong>
+                                    <span>@uu.FullName</span></li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>@uu.Email</span></li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Status:</strong> <span>Active</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Title 1:</strong> <span>@uu.T1</span></li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Title 2:</strong> <span>@uu.T2</span>
+                                </li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Title 3:</strong>
+                                    <span>@uu.T3</span></li>
+                                <li><i class="bi bi-chevron-right"></i> <strong>Title 4:</strong>
+                                    <span>@uu.T4</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("Update", "Home", new { id = uu.UserId })" class="btn btn-primary">Update</a>
+                </div>
+            </div>
+
+        </div>
+    }
+    
+
+</section>

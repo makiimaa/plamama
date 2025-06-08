@@ -1,0 +1,54 @@
+@using final.Models
+@model IList<tblUsers>
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sach cac nguoi dung.</h2>
+
+        <p>
+            <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Users" asp-action="Create"><i class="bi bi-file-earmark-text me-1"></i>Add an User</a>
+            <section class="section dashboard">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+                            <div class="card-body mt-4">
+                                <table class="table table-borderless datatable">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-1 text-center">#</th>
+                                            <th class="col-1 text-center">FullName</th>
+                                            <th class="col-3 text-center">UserName</th>
+                                            <th class="col-2 text-center">CreateAt</th>
+                                            <th class="col-2 text-center">Email</th>
+                                            <th class="col-1 text-center">Status</th>
+                                            <th class="col-2 text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center" scope="row">@item.UserId</td>
+                                                <td class="text-left text-primary" scope="row"><a asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@item.UserId">@item.FullName</a></td>
+                                                <td class="text-center" scope="row">@item.UserName</td>
+                                                <td class="text-center" scope="row">@item.CreatedAt</td>
+                                                <td class="text-center" scope="row">@item.Email</td>
+                                                <td class="text-center" scope="row">
+                                                    @(item.Statuss == 1 ? "Active" : "InActive")
+                                                </td>
+                                                <td class="text-center" scope="row">
+                                                    <a asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm" title="Edit the Userscise"><i class="bi bi-pencil"></i></a>
+                                                    <a asp-area="Admin" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm" title="Delete the Userscise"><i class="bi bi-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </p>
+    </div>
+</main>

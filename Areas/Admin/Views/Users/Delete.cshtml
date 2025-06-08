@@ -1,0 +1,28 @@
+@model final.Models.tblUsers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Confirm to delete an User.</h2>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="UserId">UserId</label>
+            <input type="text" class="form-control mb-3" asp-for="UserId" disabled/>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="FullName">FullName</label>
+            <input type="text" class="form-control mb-3" asp-for="FullName" disabled/>
+        </div>
+    </div>
+    <form asp-action="Delete" method="Post">
+        <input type="hidden" asp-for="UserId"/>
+        <a class="btn btn-lg btn-warning p-2 mr-5" href="javascript:history.back()">
+            <i class="bi bi-arrow-left-circle"></i> Go back
+        </a>
+        <button type="submit" class="btn btn-lg btn-danger p-2">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </form>
+</main>

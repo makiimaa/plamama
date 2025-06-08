@@ -1,0 +1,91 @@
+﻿<main>
+
+    <!-- Hero Section -->
+    @await Component.InvokeAsync("HomeView")
+    <!-- /Hero Section -->
+
+    <!-- About Section -->
+    @await Component.InvokeAsync("InfoView")
+    <!-- /About Section -->
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Resume</h2>
+            <p>Advanced plagiarism detection system designed to maintain academic integrity by analyzing submitted documents and preventing unauthorized content submission. Our intelligent system ensures high-quality academic standards through comprehensive content verification and automated assessment protocols.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="resume-title">Sumary</h3>
+
+                    <div class="resume-item pb-0">
+                        <h4>Plagiarism Detection System</h4>
+                        <p><em>Innovative and comprehensive plagiarism detection platform developed by Group 6, featuring advanced content analysis algorithms and real-time document verification capabilities to ensure academic integrity and prevent unauthorized submissions.</em></p>
+                        <ul>
+                            <li>Development Team: Group 6</li>
+                            <li>(091) 992-2222</li>
+                            <li>nhom6@gmail.com</li>
+                        </ul>
+                    </div><!-- Edn Resume Item -->
+
+                    <h3 class="resume-title">Education</h3>
+                    <div class="resume-item">
+                        <h4>Core Detection Algorithm &amp; Machine Learning</h4>
+                        <h5>2024 - Present</h5>
+                        <p><em>Advanced Natural Language Processing Technology</em></p>
+                        <p>Implements sophisticated content analysis using machine learning algorithms and natural language processing techniques to identify potential plagiarism with high accuracy rates and minimal false positives across multiple document formats</p>
+                    </div><!-- Edn Resume Item -->
+
+                    <div class="resume-item">
+                        <h4>Database Integration &amp; Content Verification</h4>
+                        <h5>2023 - 2024</h5>
+                        <p><em>Multi-Source Academic Database Network</em></p>
+                        <p>Integrates with multiple academic databases, online repositories, and publication platforms to provide extensive cross-referencing capabilities and ensure thorough content verification across diverse sources and academic publications worldwide</p>
+                    </div><!-- Edn Resume Item -->
+
+                </div>
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="resume-title">Professional Experience</h3>
+                    <div class="resume-item">
+                        <h4>Automated Document Processing</h4>
+                        <h5>2024 - Present</h5>
+                        <p><em>Real-time Plagiarism Detection & Analysis </em></p>
+                        <ul>
+                            <li>Processes uploaded documents automatically upon submission with instant comprehensive analysis</li>
+                            <li>Performs detailed content comparison against extensive academic databases and online sources</li>
+                            <li>Generates comprehensive similarity reports with source identification and matching percentages</li>
+                            <li>Implements 60% plagiarism threshold - documents exceeding this limit are automatically rejected</li>
+                        </ul>
+                    </div><!-- Edn Resume Item -->
+
+                    <div class="resume-item">
+                        <h4>Quality Assurance & Academic Integrity Management</h4>
+                        <h5>2023 - 2024</h5>
+                        <p><em>Comprehensive Academic Standards Enforcement</em></p>
+                        <ul>
+                            <li>Maintains strict academic integrity standards through automated threshold enforcement and monitoring</li>
+                            <li>Provides detailed feedback reports highlighting potential plagiarism areas with specific recommendations</li>
+                            <li>Offers revision opportunities for students with borderline similarity scores and guidance</li>
+                            <li>Generates comprehensive analytics and detailed reporting for institutional oversight and compliance</li>
+                        </ul>
+                    </div><!-- Edn Resume Item -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section><!-- /Resume Section -->
+
+    <!-- Services Section -->
+    @await Component.InvokeAsync("ExerView")
+
+</main>

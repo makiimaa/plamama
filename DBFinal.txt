@@ -1,0 +1,168 @@
+CREATE DATABASE final;
+
+USE final;
+
+CREATE TABLE Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) CHARACTER SET utf8mb4 UNIQUE NOT NULL,
+    Email VARCHAR(100) CHARACTER SET utf8mb4 UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    FullName VARCHAR(100) CHARACTER SET utf8mb4 NOT NULL,
+    Role VARCHAR(20) CHARACTER SET utf8mb4 NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    IsActive BOOLEAN DEFAULT TRUE,
+    CHECK (Role IN ('Admin', 'Student'))
+) ENGINE=InnoDB;
+
+CREATE TABLE Categories (
+    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(100) CHARACTER SET utf8mb4 NOT NULL,
+    Description VARCHAR(500) CHARACTER SET utf8mb4,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CreatedBy INT,
+    IsActive BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+) ENGINE=InnoDB;
+
+CREATE TABLE Assignments (
+    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(200) CHARACTER SET utf8mb4 NOT NULL,
+    Description TEXT,
+    CategoryID INT,
+    DueDate DATETIME NOT NULL,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    IsActive BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+) ENGINE=InnoDB;
+
+CREATE TABLE Submissions (
+    SubmissionID INT AUTO_INCREMENT PRIMARY KEY,
+    AssignmentID INT,
+    StudentID INT,
+    FileName VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
+    FilePath VARCHAR(500) CHARACTER SET utf8mb4 NOT NULL,
+    FileSize BIGINT,
+    SubmissionDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PlagiarismScore DECIMAL(5,2),
+    Status VARCHAR(20) CHARACTER SET utf8mb4 DEFAULT 'Pending',
+    ReviewedBy INT,
+    ReviewDate DATETIME,
+    Comments TEXT,
+    IsActive BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID),
+    FOREIGN KEY (StudentID) REFERENCES Users(UserID),
+    FOREIGN KEY (ReviewedBy) REFERENCES Users(UserID),
+    CHECK (Status IN ('Pending', 'Approved', 'Rejected', 'Under Review'))
+) ENGINE=InnoDB;
+
+CREATE TABLE PlagiarismResults (
+    ResultID INT AUTO_INCREMENT PRIMARY KEY,
+    SubmissionID INT,
+    OriginalText TEXT,
+    PlagiarizedText TEXT,
+    SourceURL VARCHAR(500) CHARACTER SET utf8mb4,
+    SimilarityScore DECIMAL(5,2),
+    StartPosition INT,
+    EndPosition INT,
+    CheckDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (SubmissionID) REFERENCES Submissions(SubmissionID)
+) ENGINE=InnoDB;
+
+CREATE TABLE AIInteractions (
+    InteractionID INT AUTO_INCREMENT PRIMARY KEY,
+    SubmissionID INT,
+    UserID INT,
+    Question TEXT,
+    Response TEXT,
+    InteractionType VARCHAR(50) CHARACTER SET utf8mb4,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (SubmissionID) REFERENCES Submissions(SubmissionID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    CHECK (InteractionType IN ('Summary', 'QA', 'Analysis'))
+) ENGINE=InnoDB;
+
+Dữ liệu bao gồm:
+INSERT INTO Users (Username, Email, Password, FullName, Role)
+VALUES 
+('admin1', 'admin1@mail.com', 'pass123', 'Admin One', 'Admin'),
+('admin2', 'admin2@mail.com', 'pass123', 'Admin Two', 'Admin'),
+('admin3', 'admin3@mail.com', 'pass123', 'Admin Three', 'Admin'),
+('admin4', 'admin4@mail.com', 'pass123', 'Admin Four', 'Admin'),
+('admin5', 'admin5@mail.com', 'pass123', 'Admin Five', 'Admin'),
+('student1', 'student1@mail.com', 'pass123', 'Student One', 'Student'),
+('student2', 'student2@mail.com', 'pass123', 'Student Two', 'Student'),
+('student3', 'student3@mail.com', 'pass123', 'Student Three', 'Student'),
+('student4', 'student4@mail.com', 'pass123', 'Student Four', 'Student'),
+('student5', 'student5@mail.com', 'pass123', 'Student Five', 'Student');
+
+INSERT INTO Categories (CategoryName, Description, CreatedBy)
+VALUES
+('Math', 'Toán học cơ bản', 1),
+('Physics', 'Vật lý đại cương', 1),
+('Programming', 'Lập trình căn bản', 2),
+('AI', 'Trí tuệ nhân tạo', 2),
+('Database', 'Cơ sở dữ liệu', 3),
+('English', 'Tiếng Anh học thuật', 3),
+('Writing', 'Viết học thuật', 4),
+('History', 'Lịch sử thế giới', 4),
+('Chemistry', 'Hóa học hữu cơ', 5),
+('Biology', 'Sinh học phân tử', 5);
+
+INSERT INTO Assignments (Title, Description, CategoryID, DueDate, CreatedBy)
+VALUES
+('Bài toán đại số', 'Giải hệ phương trình', 1, '2025-06-01', 1),
+('Định luật Newton', 'Trình bày định luật 2', 2, '2025-06-01', 1),
+('Viết chương trình tính tổng', 'Sử dụng C++', 3, '2025-06-02', 2),
+('Phân tích bài toán ML', 'Áp dụng kNN', 4, '2025-06-03', 2),
+('Tối ưu SQL', 'Viết truy vấn tối ưu', 5, '2025-06-04', 3),
+('Viết email học thuật', 'Cấu trúc email formal', 6, '2025-06-01', 3),
+('Bài luận văn', 'Chủ đề tự chọn', 7, '2025-06-05', 4),
+('Chiến tranh thế giới', 'Phân tích nguyên nhân', 8, '2025-06-05', 4),
+('Hóa học hữu cơ cơ bản', 'Nhóm chức', 9, '2025-06-02', 5),
+('Sinh học DNA', 'Cấu trúc gen', 10, '2025-06-02', 5);
+
+INSERT INTO Submissions (AssignmentID, StudentID, FileName, FilePath, FileSize, PlagiarismScore, Status, ReviewedBy, ReviewDate, Comments)
+VALUES
+(1, 6, 'bai1.pdf', '/uploads/bai1.pdf', 2048, 5.00, 'Approved', 1, NOW(), 'Good'),
+(2, 7, 'bai2.pdf', '/uploads/bai2.pdf', 4096, 10.00, 'Approved', 1, NOW(), 'Correct logic'),
+(3, 8, 'bai3.cpp', '/uploads/bai3.cpp', 1024, 0.00, 'Approved', 2, NOW(), 'Clean code'),
+(4, 9, 'bai4.docx', '/uploads/bai4.docx', 3072, 15.50, 'Rejected', 2, NOW(), 'Too similar'),
+(5, 10, 'bai5.sql', '/uploads/bai5.sql', 1024, 7.50, 'Approved', 3, NOW(), 'Efficient query'),
+(6, 6, 'bai6.docx', '/uploads/bai6.docx', 2048, 3.20, 'Approved', 3, NOW(), 'Nice structure'),
+(7, 7, 'bai7.pdf', '/uploads/bai7.pdf', 2560, 12.75, 'Under Review', 4, NULL, NULL),
+(8, 8, 'bai8.doc', '/uploads/bai8.doc', 3000, 2.50, 'Pending', NULL, NULL, NULL),
+(9, 9, 'bai9.pdf', '/uploads/bai9.pdf', 2800, 0.00, 'Approved', 5, NOW(), 'Excellent'),
+(10, 10, 'bai10.docx', '/uploads/bai10.docx', 3200, 18.90, 'Rejected', 5, NOW(), 'Copied content');
+
+INSERT INTO PlagiarismResults (SubmissionID, OriginalText, PlagiarizedText, SourceURL, SimilarityScore, StartPosition, EndPosition)
+VALUES
+(1, 'ax + b = 0', 'ax + b = 0', 'https://math.com/linear', 5.00, 0, 10),
+(2, 'F = ma', 'F = ma', 'https://physics.org/newton', 10.00, 0, 5),
+(3, 'for loop', 'for loop', '', 0.00, 0, 0),
+(4, 'knn uses...', 'kNN is...', 'https://mlbase.ai/knn', 15.50, 50, 80),
+(5, 'SELECT *', 'SELECT *', 'https://sqltips.com/query', 7.50, 0, 12),
+(6, 'Dear Sir', 'Dear Sir', 'https://writing.com/formal', 3.20, 0, 15),
+(7, 'Essay starts...', 'Article...', '', 12.75, 10, 100),
+(8, 'World War I...', 'WWI...', '', 2.50, 20, 80),
+(9, 'CH3COOH', 'CH3COOH', '', 0.00, 0, 8),
+(10, 'DNA structure', 'Copied DNA structure', 'https://bio.org/dna', 18.90, 5, 50);
+
+INSERT INTO AIInteractions (SubmissionID, UserID, Question, Response, InteractionType)
+VALUES
+(1, 6, 'Tóm tắt bài toán?', 'Bài toán về phương trình bậc nhất', 'Summary'),
+(2, 7, 'Giải thích định luật Newton', 'F = ma', 'QA'),
+(3, 8, 'Chạy thử code C++', 'Chạy OK', 'Analysis'),
+(4, 9, 'Giải thích sai phạm', 'Giống kNN mẫu', 'QA'),
+(5, 10, 'SQL tối ưu?', 'Dùng LIMIT', 'Analysis'),
+(6, 6, 'Viết đoạn mở bài', 'Kính gửi thầy...', 'Summary'),
+(7, 7, 'Kiểm tra ngữ pháp', 'Câu đúng', 'QA'),
+(8, 8, 'Tóm tắt nội dung chiến tranh', 'Chiến tranh do nhiều nguyên nhân', 'Summary'),
+(9, 9, 'So sánh acid', 'Acid mạnh hơn', 'Analysis'),
+(10, 10, 'Phân tích chuỗi DNA', 'Có 4 base', 'Analysis');
+
+
+https://chatgpt.com/share/6834c523-91a8-800b-a401-696613979cf9

@@ -1,0 +1,114 @@
+@model final.Models.tblUsers
+
+@{
+    ViewData["Title"] = "Update User Information";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Update Your Information</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Update" method="post" enctype="multipart/form-data">
+                        <input asp-for="UserId" type="hidden" />
+                        <input asp-for="Roles" type="hidden" />
+                        <input asp-for="Statuss" type="hidden" />
+                        <input asp-for="CreatedAt" type="hidden" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="UserName" class="form-label">Username</label>
+                                    <input asp-for="UserName" class="form-control" readonly />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FullName" class="form-label">Full Name</label>
+                                    <input asp-for="FullName" class="form-control" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email" class="form-label">Email</label>
+                                    <input asp-for="Email" class="form-control" type="email" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Passwords" class="form-label">Password (Leave blank to keep current)</label>
+                                    <input asp-for="Passwords" class="form-control" type="password" />
+                                    <span asp-validation-for="Passwords" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="T1" class="form-label">Title 1</label>
+                                    <input asp-for="T1" class="form-control" />
+                                    <span asp-validation-for="T1" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="T2" class="form-label">Title 2</label>
+                                    <input asp-for="T2" class="form-control" />
+                                    <span asp-validation-for="T2" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="T3" class="form-label">Title 3</label>
+                                    <input asp-for="T3" class="form-control" />
+                                    <span asp-validation-for="T3" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="T4" class="form-label">Title 4</label>
+                                    <input asp-for="T4" class="form-control" />
+                                    <span asp-validation-for="T4" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Current Image</label>
+                            <div>
+                                <img src="~/assets/img/@Model.Images" alt="Current Image" class="img-thumbnail" style="max-width: 150px;" />
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Upload New Image (Optional)</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Update Information</button>
+                            <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,35 @@
+@model final.Models.viewEU
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var results = (List<(string paragraph, bool isPlagiarized, int matchCount, List<string> urls)>)ViewBag.Results;
+    float plagiarismRate = (float)ViewBag.PlagiarismRate;
+}
+<main id="main" class="main">
+    <h2>Kết quả kiểm tra đạo văn</h2>
+
+    <p><strong>Tổng đoạn kiểm tra:</strong> @results.Count</p>
+    <p><strong>Tỷ lệ đạo văn:</strong> @plagiarismRate.ToString("0.##")%</p>
+
+    @for (int i = 0; i < results.Count; i++)
+    {
+        var item = results[i];
+        <div class="card mb-3">
+            <div class="card-body">
+                <p><strong>Đoạn @i:</strong> @item.paragraph</p>
+                <p class="text-@(item.isPlagiarized ? "danger" : "success")">
+                    @(item.isPlagiarized ? $"⚠️ Có thể đạo văn (Số kết quả: {item.matchCount})" : "✅ Gốc")
+                </p>
+                @if (item.urls.Count > 0)
+                {
+                    <p><strong>Trang giống nội dung:</strong></p>
+                    <ul>
+                        @foreach (var url in item.urls)
+                        {
+                            <li><a href="@url" target="_blank">@url</a></li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    }
+</main>

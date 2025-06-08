@@ -1,0 +1,23 @@
+@model final.Models.viewEU
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Tóm tắt bài nộp</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Nội dung gốc</h4>
+            <textarea class="form-control" rows="20">@ViewBag.Original</textarea>
+        </div>
+        <div class="col-md-6">
+            <h4>Tóm tắt</h4>
+            <textarea class="form-control" rows="20">@ViewBag.Summary</textarea>
+        </div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-secondary mt-3">← Quay lại danh sách</a>
+</main>

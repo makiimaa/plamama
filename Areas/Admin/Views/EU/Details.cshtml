@@ -1,0 +1,41 @@
+@model final.Models.viewEU
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Exercise Details.</h2>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="EUID">Id</label>
+            <input type="text" class="form-control mb-3" asp-for="EUID" disabled/>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="FilePath">FileName</label>
+            <input type="text" class="form-control mb-3" asp-for="FilePath" disabled/>
+        </div>
+        <div class="form-group">
+            <label>File Preview</label>
+            <iframe src="@Model.FilePath" width="100%" height="600px" style="border:1px solid #ccc;"></iframe>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <!-- Nút Tóm tắt -->
+        <form asp-action="Summarize" method="post">
+            <input type="hidden" asp-for="EUID" />
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-lightbulb"></i> Tóm tắt nội dung
+            </button>
+        </form>
+
+        <!-- Nút Kiểm tra đạo văn -->
+        <form asp-action="CheckPlagiarism" method="post">
+            <input type="hidden" asp-for="EUID" />
+            <button type="submit" class="btn btn-lg btn-danger p-2">
+                <i class="bi bi-shield-lock"></i> Kiểm tra đạo văn
+            </button>
+        </form>
+    </div>
+</main>

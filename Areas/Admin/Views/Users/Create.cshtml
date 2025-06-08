@@ -1,0 +1,52 @@
+@model final.Models.tblUsers
+@using final.Utilities
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Add an User.</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Create">
+            <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                    <label>User FullName</label>
+                    <input type="text" class="form-control" asp-for="FullName" placeholder="FullName...">
+                    <span asp-asp-validation-for="FullName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>UserName</label>
+                    <input type="text" class="form-control" asp-for="UserName">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>PassWord</label>
+                    <input type="text" class="form-control" asp-for="Passwords">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Email</label>
+                    <input type="email" class="form-control" asp-for="Email">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Visiible</label>
+                    <select asp-for="Statuss" class="form-select" id="Statuss">
+                        <option value=1>Active</option>
+                        <option value=0>InActive</option>
+                    </select>
+                </div>
+                <div class="col-12 text-center text-danger">
+                    <h4>
+                        @Functions._Message
+                    </h4>
+                </div>
+            </div>
+            <a asp-asp-controller="Users" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Go back
+            </a>
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-file-plus-fill"></i> Save information
+            </button>
+        </form>
+    </div>
+</main>

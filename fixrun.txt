@@ -1,0 +1,8 @@
+window
+Remove-Item -Recurse -Force .\obj
+Remove-Item -Recurse -Force .\bin
+
+mac 
+dotnet clean
+rm -rf obj/ bin/
+dotnet build

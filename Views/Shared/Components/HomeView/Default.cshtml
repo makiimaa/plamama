@@ -1,0 +1,17 @@
+@using final.Models
+@model IList<tblUsers>
+@using final.Utilities
+<section id="hero" class="hero section dark-background">
+    @foreach (var uu in Model.Where(m => m.UserId == @Functions._UserId))
+    {
+        <img src="assets/img/@uu.Bgr" alt="" data-aos="fade-in" class="">
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <h2>@uu.FullName</h2>
+            <p>I'm <span class="typed"
+                data-typed-items="@uu.T1, @uu.T2, @uu.T3, @uu.T4">@uu.T1</span><span
+                class="typed-cursor typed-cursor--blink" aria-hidden="true"></span><span
+                class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+        </div>
+    }
+</section>

@@ -1,0 +1,40 @@
+@using final.Areas.Admin.Models
+@model IList<AdminMenu>
+
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/Admin/Home/Index">
+                <i class="bi bi-grid"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+        </li>
+        <!-- End Dashboard Nav -->
+
+        @foreach (var item in Model.Where(m => m.ItemLevel == 1).OrderBy(m => m.ItemOrder))
+        {
+            var pID = item.AdminMenuID;
+            var sMenu = Model.Where(p => p.ParentLevel == pID).OrderBy(p => p.ItemOrder).ToList();
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="@item.ItemTarget" asp-area="Admin"
+                    asp-controller="@item.ControllerName" asp-action="@item.ActionName">
+                    <i class="@item.Icon"></i> <span>@item.ItemName</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                @if (sMenu != null)
+                {
+                    <ul id="@item.IdName" class="nav-content" data-bs-parent="#sidebar-nav">
+                        @foreach (var smn in sMenu)
+                        {
+                            <li>
+                                <a href="/Admin/@smn.ControllerName/@smn.ActionName">
+                                    <i class="bi bi-circle"></i><span>@smn.ItemName</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+</aside>

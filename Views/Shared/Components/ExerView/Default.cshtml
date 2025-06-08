@@ -1,0 +1,112 @@
+@using final.Models;
+@using final.Utilities;
+@model IList<ExerciseViewModel>
+
+<section id="services" class="services section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Exercise</h2>
+        <p>Do following Exercise then nop for me.</p>
+    </div><!-- End Section Title -->
+
+    <div class="container">
+        <div class="row gy-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card w-100 border-@item.GetStatusColor()">
+                        <div class="card-header bg-@item.GetStatusColor() text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="icon flex-shrink-0">
+                                    <i class="bi bi-journal-code"></i>
+                                </div>
+                                <span class="badge bg-light text-dark">@item.GetStatusText()</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/Home/Details/@item.ExerId" class="stretched-link text-decoration-none"
+                                    style="font-family: Arial, Helvetica, sans-serif;">
+                                    @item.ExerName
+                                </a>
+                            </h5>
+                            @* <p class="card-text">@item.Contents</p> *@
+
+                            @if (item.Deadline.HasValue)
+                            {
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar-event"></i>
+                                        Deadline: @item.Deadline.Value.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+                                </div>
+                            }
+
+                            @* @if (item.CreateAt.HasValue)
+                            {
+                                <div class="mt-1">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock"></i>
+                                        Tạo lúc: @item.CreateAt.Value.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+                                </div>
+                            } *@
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .service-item .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .service-item .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .border-info {
+        border-color: #17a2b8 !important;
+    }
+
+    .bg-info {
+        background-color: #17a2b8 !important;
+        background-image: linear-gradient(#fff,#43c3ee);
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+        background-image: linear-gradient(#fff,#4dd36f);
+    }
+
+    .border-danger {
+        border-color: #dc3545 !important;
+    }
+
+    .bg-danger {
+        background-color: #dc3545 !important;
+        background-image: linear-gradient(#fff,#e81c1c);
+    }
+
+    .card-header .icon {
+        font-size: 1.5rem;
+    }
+
+    .stretched-link {
+        color: inherit;
+    }
+
+    .stretched-link:hover {
+        color: inherit;
+        text-decoration: underline !important;
+    }
+</style>
