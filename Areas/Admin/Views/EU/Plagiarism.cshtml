@@ -1,35 +1,282 @@
 @model final.Models.viewEU
 @{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-    var results = (List<(string paragraph, bool isPlagiarized, int matchCount, List<string> urls)>)ViewBag.Results;
+    var results = (List<(string sentence, bool isPlagiarized, int matchCount, List<string> urls)>)ViewBag.Results;
     float plagiarismRate = (float)ViewBag.PlagiarismRate;
+    int totalSentences = (int)ViewBag.TotalSentences;
+    int plagiarizedSentences = (int)ViewBag.PlagiarizedSentences;
 }
+
 <main id="main" class="main">
-    <h2>Kết quả kiểm tra đạo văn</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-search"></i> Kết quả kiểm tra đạo văn
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Thống kê tổng quan -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h5>@totalSentences</h5>
+                                        <p class="mb-0">Tổng số câu</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-danger text-white">
+                                    <div class="card-body text-center">
+                                        <h5>@plagiarizedSentences</h5>
+                                        <p class="mb-0">Câu đạo văn</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h5>@(totalSentences - plagiarizedSentences)</h5>
+                                        <p class="mb-0">Câu gốc</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card @(plagiarismRate > 50 ? "bg-danger" : plagiarismRate > 25 ? "bg-warning" : "bg-success") text-white">
+                                    <div class="card-body text-center">
+                                        <h5>@plagiarismRate.ToString("0.##")%</h5>
+                                        <p class="mb-0">Tỷ lệ đạo văn</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-    <p><strong>Tổng đoạn kiểm tra:</strong> @results.Count</p>
-    <p><strong>Tỷ lệ đạo văn:</strong> @plagiarismRate.ToString("0.##")%</p>
+                        <!-- Progress bar -->
+                        <div class="mb-4">
+                            <label class="form-label">Tỷ lệ đạo văn: @plagiarismRate.ToString("0.##")%</label>
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar @(plagiarismRate > 50 ? "bg-danger" : plagiarismRate > 25 ? "bg-warning" : "bg-success")" 
+                                     role="progressbar" 
+                                     style="width: @plagiarismRate.ToString("0.##")%"
+                                     aria-valuenow="@plagiarismRate" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    @plagiarismRate.ToString("0.##")%
+                                </div>
+                            </div>
+                        </div>
 
-    @for (int i = 0; i < results.Count; i++)
-    {
-        var item = results[i];
-        <div class="card mb-3">
-            <div class="card-body">
-                <p><strong>Đoạn @i:</strong> @item.paragraph</p>
-                <p class="text-@(item.isPlagiarized ? "danger" : "success")">
-                    @(item.isPlagiarized ? $"⚠️ Có thể đạo văn (Số kết quả: {item.matchCount})" : "✅ Gốc")
-                </p>
-                @if (item.urls.Count > 0)
-                {
-                    <p><strong>Trang giống nội dung:</strong></p>
-                    <ul>
-                        @foreach (var url in item.urls)
+                        <!-- Chú thích màu sắc -->
+                        <div class="mb-4">
+                            <h6>Chú thích:</h6>
+                            <div class="d-flex flex-wrap gap-3">
+                                <span class="badge bg-success fs-6">
+                                    <i class="fas fa-check"></i> Câu gốc
+                                </span>
+                                <span class="badge bg-warning fs-6">
+                                    <i class="fas fa-exclamation-triangle"></i> Có thể đạo văn (1-5 nguồn)
+                                </span>
+                                <span class="badge bg-danger fs-6">
+                                    <i class="fas fa-times"></i> Đạo văn cao (>5 nguồn)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Nội dung với highlight -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-file-text"></i> Nội dung văn bản (Highlight câu đạo văn)
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="content-display p-3 border rounded" style="background-color: #f8f9fa; line-height: 1.8; font-size: 16px;">
+                                    @for (int i = 0; i < results.Count; i++)
+                                    {
+                                        var item = results[i];
+                                        var badgeClass = "";
+                                        var highlightClass = "";
+                                        var icon = "";
+                                        
+                                        if (item.isPlagiarized)
+                                        {
+                                            if (item.matchCount > 5)
+                                            {
+                                                badgeClass = "bg-danger";
+                                                highlightClass = "highlight-danger";
+                                                icon = "fas fa-times";
+                                            }
+                                            else
+                                            {
+                                                badgeClass = "bg-warning";
+                                                highlightClass = "highlight-warning";
+                                                icon = "fas fa-exclamation-triangle";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            badgeClass = "bg-success";
+                                            highlightClass = "highlight-success";
+                                            icon = "fas fa-check";
+                                        }
+
+                                        <span class="sentence-container @highlightClass" 
+                                              data-sentence="@i"
+                                              data-plagiarized="@item.isPlagiarized.ToString().ToLower()"
+                                              data-match-count="@item.matchCount"
+                                              style="cursor: pointer; padding: 2px 4px; margin: 0 2px; border-radius: 3px; position: relative;">
+                                            @item.sentence
+                                            @if (item.isPlagiarized)
+                                            {
+                                                <sup class="badge @badgeClass badge-sm ms-1" style="font-size: 0.6em;">
+                                                    <i class="@icon"></i> @item.matchCount
+                                                </sup>
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chi tiết từng câu đạo văn -->
+                        @if (results.Any(r => r.isPlagiarized))
                         {
-                            <li><a href="@url" target="_blank">@url</a></li>
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-list"></i> Chi tiết câu đạo văn
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="accordion" id="plagiarismAccordion">
+                                        @for (int i = 0; i < results.Count; i++)
+                                        {
+                                            var item = results[i];
+                                            if (item.isPlagiarized)
+                                            {
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="heading@i">
+                                                        <button class="accordion-button collapsed" type="button" 
+                                                                data-bs-toggle="collapse" 
+                                                                data-bs-target="#collapse@i" 
+                                                                aria-expanded="false" 
+                                                                aria-controls="collapse@i">
+                                                            <span class="badge @(item.matchCount > 5 ? "bg-danger" : "bg-warning") me-2">
+                                                                @item.matchCount nguồn
+                                                            </span>
+                                                            Câu @(i + 1): @(item.sentence.Length > 100 ? item.sentence.Substring(0, 100) + "..." : item.sentence)
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapse@i" class="accordion-collapse collapse" 
+                                                         aria-labelledby="heading@i" 
+                                                         data-bs-parent="#plagiarismAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <h6>Nội dung câu:</h6>
+                                                                    <p class="text-muted">@item.sentence</p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <h6>Nguồn tham khảo (@item.urls.Count nguồn):</h6>
+                                                                    @if (item.urls.Count > 0)
+                                                                    {
+                                                                        <ul class="list-unstyled">
+                                                                            @foreach (var url in item.urls.Take(5))
+                                                                            {
+                                                                                <li class="mb-2">
+                                                                                    <a href="@url" target="_blank" class="text-decoration-none">
+                                                                                        <i class="fas fa-external-link-alt me-1"></i>
+                                                                                        @(url.Length > 60 ? url.Substring(0, 60) + "..." : url)
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p class="text-muted">Không có nguồn cụ thể.</p>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         }
-                    </ul>
-                }
+                    </div>
+                </div>
             </div>
         </div>
-    }
+    </div>
 </main>
+
+<style>
+    .highlight-success {
+        background-color: #d4edda !important;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .highlight-warning {
+        background-color: #fff3cd !important;
+        border: 1px solid #ffeaa7;
+    }
+    
+    .highlight-danger {
+        background-color: #f8d7da !important;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .sentence-container:hover {
+        opacity: 0.8;
+        transform: scale(1.01);
+        transition: all 0.2s ease;
+    }
+    
+    .content-display {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    
+    .badge-sm {
+        font-size: 0.7em !important;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+</style>
+
+<script>
+    // Thêm tooltip hoặc click event cho từng câu
+    document.addEventListener('DOMContentLoaded', function() {
+        const sentences = document.querySelectorAll('.sentence-container');
+        
+        sentences.forEach(function(sentence, index) {
+            sentence.addEventListener('click', function() {
+                const isPlagiarized = this.getAttribute('data-plagiarized') === 'true';
+                const matchCount = this.getAttribute('data-match-count');
+                
+                if (isPlagiarized) {
+                    // Scroll to accordion item
+                    const accordionItem = document.querySelector('#collapse' + index);
+                    if (accordionItem) {
+                        accordionItem.scrollIntoView({ behavior: 'smooth' });
+                        // Mở accordion
+                        const button = document.querySelector('[data-bs-target="#collapse' + index + '"]');
+                        if (button && button.classList.contains('collapsed')) {
+                            button.click();
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>y

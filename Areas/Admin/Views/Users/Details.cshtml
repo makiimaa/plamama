@@ -1,0 +1,36 @@
+@model final.Models.tblUsers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Exercise Details.</h2>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6"></div>
+            <label asp-for="FullName">FullName</label>
+            <input type="text" class="form-control mb-3" asp-for="FullName" disabled/>
+        </div>  
+        <div class="form-group col-md-6"></div>
+            <label asp-for="UserName">UserName</label>
+            <input type="text" class="form-control mb-3" asp-for="UserName" disabled/>
+        </div>             
+        <div class="form-group col-md-6"></div>
+            <label asp-for="Passwords">Passwords</label>
+            <input type="text" class="form-control mb-3" asp-for="Passwords" disabled/>
+        </div>                        
+        <div class="form-group col-md-6"></div>
+            <label asp-for="Email">Email</label>
+            <input type="text" class="form-control mb-3" asp-for="Email" disabled/>
+        </div>             
+        <div class="form-group col-md-6"></div>
+            <label asp-for="CreatedAt">CreatedAt</label>
+            <input type="text" class="form-control mb-3" asp-for="CreatedAt" disabled/>
+        </div>   
+        <form>
+            <a class="btn btn-lg btn-warning p-2 mr-5" href="javascript:history.back()">
+                <i class="bi bi-arrow-left-circle"></i> Go back
+            </a>
+        </form>        
+    </div>
+</main>

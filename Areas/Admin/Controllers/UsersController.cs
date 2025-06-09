@@ -29,6 +29,16 @@ namespace final.Areas.Admin.Controllers
             return View(uList);
         }
 
+        public IActionResult Details(int? id)
+        {
+            if (id == null || id == 0)
+                return NotFound();
+            var e = _context.Userss.Find(id);
+            if (e == null)
+                return NotFound();
+            return View(e);
+        }
+
         public IActionResult Create()
         {
             return View();

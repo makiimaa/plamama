@@ -40,6 +40,7 @@ namespace final.Areas.Admin.Controllers
             Functions._Message = string.Empty;
             Functions._UserId = check.UserId;
             Functions._UserName = string.IsNullOrEmpty(check.UserName) ? string.Empty : check.UserName;
+            Functions._FullName = string.IsNullOrEmpty(check.FullName) ? string.Empty : check.FullName;
             Functions._Email = string.IsNullOrEmpty(check.Email) ? string.Empty: check.Email;
             if (check.Roles == 0)
             {

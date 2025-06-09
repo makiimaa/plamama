@@ -3,10 +3,10 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h2>Danh sach cac bai thuc hanh.</h2>
+        <h2 style="color: rgb(18, 150, 82);">EXERCISE LIST.</h2>
 
         <p>
-            <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Exer" asp-action="Create"><i class="bi bi-file-earmark-text me-1"></i>Add an Exercise</a>
+            @* <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="Exer" asp-action="Create"><i class="bi bi-file-earmark-text me-1"></i>Add an Exercise</a> *@
             <section class="section dashboard">
                 <div class="row">
                     <div class="col-12">
@@ -35,8 +35,8 @@
                                                 <td class="text-center" scope="row">@item.SubmitDate</td>
                                                 <td class="text-center" scope="row">@item.IsAcepted</td>
                                                 <td class="text-center" scope="row">
-                                                    <a asp-area="Admin" asp-controller="Exer" asp-action="Edit" asp-route-id="@item.EUID" class="btn btn-primary btn-sm" title="Edit the Exercise"><i class="bi bi-pencil"></i></a>
-                                                    <a asp-area="Admin" asp-controller="Exer" asp-action="Delete" asp-route-id="@item.EUID" class="btn btn-danger btn-sm" title="Delete the Exercise"><i class="bi bi-trash"></i></a>
+                                                    <a asp-area="Admin" asp-controller="EU" asp-action="Accept" asp-route-id="@item.EUID" class="btn btn-success btn-sm" title="Accept"><i class="bi bi-check"></i></a>
+                                                    <a asp-area="Admin" asp-controller="EU" asp-action="Refuse" asp-route-id="@item.EUID" class="btn btn-danger btn-sm" title="Refuse"><i class="bi bi-x"></i></a>
                                                 </td>
                                             </tr>
                                         }

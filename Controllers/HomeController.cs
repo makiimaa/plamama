@@ -41,6 +41,7 @@ public class HomeController : Controller
         Functions._UserName = string.Empty;
         Functions._Email = string.Empty;
         Functions._Message = string.Empty;
+        Functions._FullName = string.Empty;
         return RedirectToAction("Index", "Home", new { area = "Admin" });
     }
 

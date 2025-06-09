@@ -1,0 +1,332 @@
+@model final.Models.DocumentComparisonResult
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="pagetitle mb-4">
+            <h2><i class="fas fa-copy"></i> Kiểm tra trùng lặp văn bản</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Danh sách bài nộp</a></li>
+                    <li class="breadcrumb-item active">Kiểm tra trùng lặp</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Thông tin bài hiện tại -->
+        <div class="card mb-4">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle"></i> Thông tin bài kiểm tra
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Người nộp:</strong> @Model.CurrentUserName
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Bài tập:</strong> @Model.ExerciseName
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Tổng số bài nộp:</strong> @Model.TotalSubmissions
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> @ViewBag.Error
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(ViewBag.Message as string))
+        {
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> @ViewBag.Message
+            </div>
+        }
+        else if (Model.Comparisons.Any())
+        {
+            <!-- Thống kê tổng quan -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                            <h4>@Model.Comparisons.Count(x => x.SimilarityPercentage >= 80)</h4>
+                            <p class="mb-0">Trùng lặp cao</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-exclamation fa-2x mb-2"></i>
+                            <h4>@Model.Comparisons.Count(x => x.SimilarityPercentage >= 60 && x.SimilarityPercentage < 80)</h4>
+                            <p class="mb-0">Trùng lặp vừa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-info fa-2x mb-2"></i>
+                            <h4>@Model.Comparisons.Count(x => x.SimilarityPercentage >= 40 && x.SimilarityPercentage < 60)</h4>
+                            <p class="mb-0">Tương đồng thấp</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-check fa-2x mb-2"></i>
+                            <h4>@Model.Comparisons.Count(x => x.SimilarityPercentage < 40)</h4>
+                            <p class="mb-0">Khác biệt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bảng kết quả so sánh -->
+            <div class="card">
+                <div class="card-header bg-gradient-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table"></i> Kết quả so sánh với các bài khác
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="duplicateTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 5%">STT</th>
+                                    <th style="width: 25%">Họ tên</th>
+                                    <th style="width: 15%">Tỷ lệ trùng lặp</th>
+                                    <th style="width: 15%">Mức độ</th>
+                                    <th style="width: 25%">Đánh giá</th>
+                                    <th style="width: 15%">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Comparisons.Count; i++)
+                                {
+                                    var comparison = Model.Comparisons[i];
+                                    var rowClass = comparison.SimilarityPercentage >= 80 ? "table-danger" :
+                                                  comparison.SimilarityPercentage >= 60 ? "table-warning" :
+                                                  comparison.SimilarityPercentage >= 40 ? "table-info" : "";
+                                    
+                                    <tr class="@rowClass">
+                                        <td>@(i + 1)</td>
+                                        <td>
+                                            <strong>@comparison.FullName</strong>
+                                            <br>
+                                            <small class="text-muted">ID: @comparison.EUID</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                                    <div class="progress-bar @(comparison.SimilarityPercentage >= 80 ? "bg-danger" :
+                                                                              comparison.SimilarityPercentage >= 60 ? "bg-warning" :
+                                                                              comparison.SimilarityPercentage >= 40 ? "bg-info" : "bg-success")" 
+                                                         role="progressbar" 
+                                                         style="width: @comparison.SimilarityPercentage%"
+                                                         aria-valuenow="@comparison.SimilarityPercentage" 
+                                                         aria-valuemin="0" 
+                                                         aria-valuemax="100">
+                                                        @comparison.SimilarityPercentage.ToString("F1")%
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge @(comparison.SimilarityLevel switch {
+                                                "Rất cao" => "bg-danger",
+                                                "Cao" => "bg-warning",
+                                                "Trung bình" => "bg-info",
+                                                "Thấp" => "bg-secondary",
+                                                _ => "bg-success"
+                                            })">
+                                                @comparison.SimilarityLevel
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                @if (comparison.SimilarityPercentage >= 80)
+                                                {
+                                                    <span class="text-danger">⚠️ Cần kiểm tra kỹ</span>
+                                                }
+                                                else if (comparison.SimilarityPercentage >= 60)
+                                                {
+                                                    <span class="text-warning">⚡ Có thể trùng lặp</span>
+                                                }
+                                                else if (comparison.SimilarityPercentage >= 40)
+                                                {
+                                                    <span class="text-info">ℹ️ Tương đồng một phần</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-success">✅ Khác biệt rõ rệt</span>
+                                                }
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" 
+                                                    onclick="showDetails(@comparison.EUID, '@comparison.FullName', @comparison.SimilarityPercentage)"
+                                                    title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="@Url.Action("Details", new { id = comparison.EUID })" 
+                                               class="btn btn-sm btn-outline-secondary" 
+                                               title="Xem bài nộp">
+                                                <i class="fas fa-file-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> 
+                Không có dữ liệu để so sánh hoặc không thể trích xuất nội dung từ các file.
+            </div>
+        }
+
+        <!-- Action buttons -->
+        <div class="d-flex gap-2 mt-4">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+            </a>
+            @if (Model.Comparisons.Any())
+            {
+                <button class="btn btn-primary" onclick="exportResults()">
+                    <i class="fas fa-download"></i> Xuất báo cáo
+                </button>
+                <button class="btn btn-warning" onclick="printResults()">
+                    <i class="fas fa-print"></i> In báo cáo
+                </button>
+            }
+        </div>
+    </div>
+</main>
+
+<!-- Modal chi tiết -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết so sánh</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Nội dung sẽ được load bằng JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+    }
+    
+    .bg-gradient-secondary {
+        background: linear-gradient(45deg, #6c757d, #495057);
+    }
+    
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .table th {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .progress {
+        background-color: #e9ecef;
+    }
+    
+    .progress-bar {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .badge {
+        font-size: 0.8rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+</style>
+
+<script>
+    function showDetails(euid, fullName, similarity) {
+        document.getElementById('modalContent').innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
+                <p class="mt-2">Đang tải chi tiết so sánh...</p>
+            </div>
+        `;
+        
+        $('#detailModal').modal('show');
+        
+        // Giả lập việc load chi tiết (có thể thay bằng AJAX call thực tế)
+        setTimeout(() => {
+            document.getElementById('modalContent').innerHTML = `
+                <h6>So sánh với: <strong>${fullName}</strong></h6>
+                <div class="alert alert-info">
+                    <strong>Tỷ lệ trùng lặp: ${similarity.toFixed(1)}%</strong>
+                </div>
+                <p class="text-muted">
+                    Chi tiết phân tích sẽ được hiển thị ở đây khi tích hợp đầy đủ với API.
+                    Hiện tại đây là phiên bản demo.
+                </p>
+            `;
+        }, 1000);
+    }
+    
+    function exportResults() {
+        // Implement export functionality
+        alert('Chức năng xuất báo cáo sẽ được triển khai');
+    }
+    
+    function printResults() {
+        window.print();
+    }
+    
+    // Initialize DataTable if available
+    $(document).ready(function() {
+        if ($.fn.DataTable) {
+            $('#duplicateTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/vi.json"
+                },
+                "order": [[ 2, "desc" ]], // Sắp xếp theo tỷ lệ trùng lặp
+                "pageLength": 25
+            });
+        }
+    });
+</script>

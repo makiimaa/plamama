@@ -22,6 +22,11 @@
     </div>
 
     <div class="d-flex gap-2">
+        <form>
+            <a class="btn btn-lg btn-warning p-2 mr-5" href="javascript:history.back()">
+                <i class="bi bi-arrow-left-circle"></i> Go back
+            </a>
+        </form> 
         <!-- Nút Tóm tắt -->
         <form asp-action="Summarize" method="post">
             <input type="hidden" asp-for="EUID" />
@@ -37,5 +42,13 @@
                 <i class="bi bi-shield-lock"></i> Kiểm tra đạo văn
             </button>
         </form>
+
+        <form asp-action="Duplicate" method="post">
+            <input type="hidden" asp-for="EUID" />
+            <button type="submit" class="btn btn-lg btn-success p-2">
+                <i class="bi bi-shield-lock"></i> Kiểm tra trùng lặp
+            </button>
+        </form>
+
     </div>
 </main>

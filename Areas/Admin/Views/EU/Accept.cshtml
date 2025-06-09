@@ -1,0 +1,43 @@
+@model final.Models.viewEU
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>CONFIRM TO ACCEPT THIS EXERCISE.</h2>
+    </div>
+    <div class="container shadow p-5">
+        <form method="Post" asp-action="Accept">
+            <div class="form-row">
+                <input type="hidden" asp-for="UID" />
+                <input type="hidden" asp-for="EID" />
+                <input type="hidden" asp-for="FilePath" />
+                <input type="hidden" asp-for="SubmitDate" />
+                <input type="hidden" class="form-control" asp-for="EUID">
+                <div class="form-group col-md-6 mb-3">
+                    <label>Exercise Name</label>
+                    <input type="text" class="form-control" asp-for="ExerName" placeholder="ExerName...">
+                    <span asp-asp-validation-for="ExerName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>User Name</label>
+                    <input type="text" class="form-control" asp-for="FullName">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label>Visiible</label>
+                    <select asp-for="IsAcepted" class="form-select" id="IsActice">
+                        <option value="True">Accept</option>
+                        <option value="False">Not Accept</option>
+                    </select>
+                </div>
+            </div>
+            <a asp-asp-controller="EU" asp-action="Index" class="btn btn-lg btn-warning p-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Go back
+            </a>
+            <button type="submit" class="btn btn-lg btn-primary p-2">
+                <i class="bi bi-check"></i> Accept
+            </button>
+        </form>
+    </div>
+</main>

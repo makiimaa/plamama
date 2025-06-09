@@ -29,6 +29,16 @@ namespace final.Areas.Admin.Controllers
             var eList = _context.Exers.OrderBy(e => e.ExerId).ToList();
             return View(eList);
         }
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null || id == 0)
+                return NotFound();
+            var e = _context.Exers.Find(id);
+            if (e == null)
+                return NotFound();
+            return View(e);
+        }
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)

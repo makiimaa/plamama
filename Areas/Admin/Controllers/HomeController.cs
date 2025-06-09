@@ -26,7 +26,9 @@ namespace final.Areas.Admin.Controllers
             Functions._UserName = string.Empty;
             Functions._Email = string.Empty;
             Functions._Message = string.Empty;
+            Functions._FullName = string.Empty;
             return RedirectToAction("Index", "Home");
         }
+        
     }
 }
