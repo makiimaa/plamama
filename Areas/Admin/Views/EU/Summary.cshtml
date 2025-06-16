@@ -11,11 +11,11 @@
     <div class="container-fluid">
         <!-- Header -->
         <div class="pagetitle mb-4">
-            <h2><i class="fas fa-robot"></i> Tóm tắt bài nộp bằng AI</h2>
+            <h2><i class="fas fa-robot"></i> Summary using AI</h2>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Index">Danh sách bài nộp</a></li>
-                    <li class="breadcrumb-item active">Tóm tắt AI</li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Exercises List</a></li>
+                    <li class="breadcrumb-item active">AI Summary</li>
                 </ol>
             </nav>
         </div>
@@ -35,7 +35,7 @@
                         <div class="card-body text-center">
                             <i class="fas fa-file-word fa-2x mb-2"></i>
                             <h4>@wordCount</h4>
-                            <p class="mb-0">Từ gốc</p>
+                            <p class="mb-0">Root words</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <div class="card-body text-center">
                             <i class="fas fa-compress fa-2x mb-2"></i>
                             <h4>@summaryWordCount</h4>
-                            <p class="mb-0">Từ tóm tắt</p>
+                            <p class="mb-0">Summary Words</p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="card-body text-center">
                             <i class="fas fa-list fa-2x mb-2"></i>
                             <h4>@(ViewBag.SentenceCount ?? 0)</h4>
-                            <p class="mb-0">Câu văn</p>
+                            <p class="mb-0">Sentences</p>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         <div class="card-body text-center">
                             <i class="fas fa-percentage fa-2x mb-2"></i>
                             <h4>@compressionRatio.ToString("F1")%</h4>
-                            <p class="mb-0">Tỷ lệ nén</p>
+                            <p class="mb-0">Compression Rate</p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                 <div class="card mb-4">
                     <div class="card-header bg-gradient-primary text-white">
                         <h5 class="mb-0">
-                            <i class="fas fa-lightbulb"></i> Ý tưởng chính
+                            <i class="fas fa-lightbulb"></i> Main Idea
                         </h5>
                     </div>
                     <div class="card-body">
@@ -91,7 +91,7 @@
                 <div class="card mb-4">
                     <div class="card-header bg-gradient-success text-white">
                         <h5 class="mb-0">
-                            <i class="fas fa-list-ul"></i> Các điểm chính
+                            <i class="fas fa-list-ul"></i> Key Points
                         </h5>
                     </div>
                     <div class="card-body">
@@ -123,8 +123,8 @@
                     <div class="card h-100">
                         <div class="card-header bg-gradient-secondary text-white">
                             <h5 class="mb-0">
-                                <i class="fas fa-file-text"></i> Nội dung gốc
-                                <span class="badge bg-light text-dark ms-2">@wordCount từ</span>
+                                <i class="fas fa-file-text"></i> Root Content
+                                <span class="badge bg-light text-dark ms-2">@wordCount Words</span>
                             </h5>
                         </div>
                         <div class="card-body">
@@ -135,7 +135,7 @@
                                 }
                                 else
                                 {
-                                    <p class="text-muted">Không có nội dung gốc.</p>
+                                    <p class="text-muted">There is no root content.</p>
                                 }
                             </div>
                         </div>
@@ -147,8 +147,8 @@
                     <div class="card h-100">
                         <div class="card-header bg-gradient-primary text-white">
                             <h5 class="mb-0">
-                                <i class="fas fa-magic"></i> Tóm tắt AI
-                                <span class="badge bg-light text-dark ms-2">@summaryWordCount từ</span>
+                                <i class="fas fa-magic"></i> AI Summarry
+                                <span class="badge bg-light text-dark ms-2">@summaryWordCount Words</span>
                             </h5>
                         </div>
                         <div class="card-body">
@@ -159,7 +159,7 @@
                                 }
                                 else
                                 {
-                                    <p class="text-light">Không có nội dung tóm tắt.</p>
+                                    <p class="text-light">No summary available.</p>
                                 }
                             </div>
                         </div>
@@ -170,7 +170,7 @@
             <!-- Progress bar tỷ lệ nén -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h6>Hiệu quả tóm tắt</h6>
+                    <h6>Summary effectiveness</h6>
                     <div class="progress mb-2" style="height: 25px;">
                         <div class="progress-bar bg-gradient-success" role="progressbar" 
                              style="width: @((100 - compressionRatio).ToString("F1"))%" 
@@ -181,8 +181,8 @@
                         </div>
                     </div>
                     <small class="text-muted">
-                        Văn bản được rút gọn từ @wordCount từ xuống còn @summaryWordCount từ 
-                        (tiết kiệm @((100 - compressionRatio).ToString("F1"))% độ dài)
+                        Shortened text from @wordCount words to @summaryWordCount words. 
+                        (save @((100 - compressionRatio).ToString("F1"))% length)
                     </small>
                 </div>
             </div>
@@ -190,14 +190,14 @@
 
         <!-- Action buttons -->
         <div class="d-flex gap-2 mb-4">
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+            <a asp-action="Index" class="btn btn-warning">
+                <i class="bi bi-arrow-left"></i> Go Back
             </a>
             <button class="btn btn-primary" onclick="printSummary()">
-                <i class="fas fa-print"></i> In tóm tắt
+                <i class="bi bi-print"></i> Print Summary
             </button>
             <button class="btn btn-success" onclick="copySummary()">
-                <i class="fas fa-copy"></i> Sao chép tóm tắt
+                <i class="bi bi-copy"></i> Coppy Summary
             </button>
         </div>
     </div>

@@ -201,33 +201,33 @@
             @if (isDeadlinePassed)
             {
                 <div class="deadline-passed">
-                    <h5><i class="bi bi-exclamation-triangle"></i> Đã quá hạn nộp bài</h5>
-                    <p>Thời hạn nộp bài đã kết thúc vào @Model.Deadline?.ToString("dd/MM/yyyy HH:mm")</p>
+                    <h5><i class="bi bi-exclamation-triangle"></i> The deadline for submission has passed.</h5>
+                    <p>The submission deadline has ended on @Model.Deadline?.ToString("dd/MM/yyyy HH:mm")</p>
                 </div>
             }
 
             @if (existingSubmission != null)
             {
                 <div class="existing-submission">
-                    <h5><i class="bi bi-file-earmark-pdf"></i> Bài đã nộp</h5>
-                    <p><strong>Thời gian nộp:</strong> @existingSubmission.SubmitDate?.ToString("dd/MM/yyyy HH:mm")</p>
-                    <p><strong>Trạng thái:</strong>
+                    <h5><i class="bi bi-file-earmark-pdf"></i> Submitted exercise</h5>
+                    <p><strong>Submission time:</strong> @existingSubmission.SubmitDate?.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Status:</strong>
                         @if (existingSubmission.IsAcepted == true)
                         {
-                            <span class="badge bg-success">Đã chấp nhận</span>
+                            <span class="badge bg-success">Accepted</span>
                         }
                         else if (existingSubmission.IsAcepted == false)
                         {
-                            <span class="badge bg-warning">Chờ duyệt</span>
+                            <span class="badge bg-warning">Waiting for approval</span>
                         }
                         else
                         {
-                            <span class="badge bg-secondary">Chưa xác định</span>
+                            <span class="badge bg-secondary">Not determined</span>
                         }
                     </p>
                     <p>
                         <a href="@existingSubmission.FilePath" target="_blank" class="btn btn-outline-primary">
-                            <i class="bi bi-eye"></i> Xem bài đã nộp
+                            <i class="bi bi-eye"></i> View submitted exercise
                         </a>
                     </p>
                 </div>
@@ -235,15 +235,21 @@
 
             @if (!isDeadlinePassed)
             {
-                <h5>@(existingSubmission != null ? "Thay đổi bài nộp:" : "Nộp bài PDF tại đây:")</h5>
+                <h5>@(existingSubmission != null ? "Change submissions:" : "Submit PDF here:")</h5>
                 <form asp-controller="Home" asp-action="Upload" asp-route-exerId="@Model.ExerId" method="post"
                     enctype="multipart/form-data">
                     <div class="mb-3">
                         <input type="file" name="pdfFile" class="form-control" accept=".pdf" required />
-                        <div class="form-text">Chỉ chấp nhận file PDF. Hệ thống sẽ tự động kiểm tra đạo văn.</div>
+                        <div class="form-text">Only PDF files are accepted. The system will automatically check for
+                            plagiarism.</div>
                     </div>
+                    
+                        <a class="btn btn-lg btn-warning p-2 mr-5" href="javascript:history.back()">
+                            <i class="bi bi-arrow-left-circle"></i> Go back
+                        </a>
+                    
                     <button type="submit" class="btn btn-success">
-                        <i class="bi bi-upload"></i> @(existingSubmission != null ? "Cập nhật bài nộp" : "Nộp bài")
+                        <i class="bi bi-upload"></i> @(existingSubmission != null ? "Update submission" : "Submit")
                     </button>
                 </form>
             }
@@ -260,16 +266,16 @@
 
             @if (!ViewData.ModelState.IsValid)
             {
-                <div class="alert alert-danger mt-3">Có lỗi xảy ra. Kiểm tra lại file.</div>
+                <div class="alert alert-danger mt-3">An error occurred. Check the file again.</div>
             }
 
             @if (plagiarismResult != null)
             {
                 <div class="plagiarism-stats">
-                    <h5><i class="bi bi-shield-check"></i> Kết quả kiểm tra đạo văn</h5>
+                    <h5><i class="bi bi-shield-check"></i> Plagiarism check results</h5>
 
                     <div class="stat-item">
-                        <strong>Tỷ lệ đạo văn:</strong>
+                        <strong>Plagiarism rate:</strong>
                         <span
                             class="@(plagiarismResult.PlagiarismPercentage > 60 ? "text-danger" : plagiarismResult.PlagiarismPercentage > 30 ? "text-warning" : "text-success")">
                             @plagiarismResult.PlagiarismPercentage.ToString("F1")%
@@ -282,28 +288,28 @@
                     </div>
 
                     <div class="stat-item mt-3">
-                        <strong>Số câu có dấu hiệu đạo văn:</strong>
+                        <strong>Number of plagiarism sentences:</strong>
                         <span>@plagiarismResult.PlagiarizedSentences.Count</span>
                     </div>
 
                     @if (plagiarismResult.PlagiarismPercentage > 60)
                     {
                         <div class="alert alert-danger mt-3">
-                            <i class="bi bi-exclamation-triangle"></i> <strong>Cảnh báo:</strong> Tỷ lệ đạo văn quá cao! Bài làm
-                            không được lưu vào hệ thống.
+                            <i class="bi bi-exclamation-triangle"></i> <strong>Warning:</strong> Plagiarism rate is too high!
+                            The assignment is not saved in the system.
                         </div>
                     }
                     else if (plagiarismResult.PlagiarismPercentage > 30)
                     {
                         <div class="alert alert-warning mt-3">
-                            <i class="bi bi-info-circle"></i> <strong>Lưu ý:</strong> Tỷ lệ đạo văn ở mức trung bình. Hãy chú ý
-                            trích dẫn nguồn.
+                            <i class="bi bi-info-circle"></i> <strong>Note:</strong> Plagiarism rate is average. Please pay
+                            attention to citation.
                         </div>
                     }
                     else
                     {
                         <div class="alert alert-success mt-3">
-                            <i class="bi bi-check-circle"></i> <strong>Tốt:</strong> Tỷ lệ đạo văn ở mức chấp nhận được.
+                            <i class="bi bi-check-circle"></i> <strong>Good:</strong> Plagiarism rate is acceptable.
                         </div>
                     }
                 </div>
@@ -311,12 +317,12 @@
                 @if (plagiarismResult.PlagiarizedSentences.Any())
                 {
                     <div class="mt-4">
-                        <h6><i class="bi bi-highlighter"></i> Nội dung được highlight theo mức độ đạo văn:</h6>
+                        <h6><i class="bi bi-highlighter"></i> Content highlighted by plagiarism level:</h6>
                         <div class="mb-3">
                             <small class="text-muted">
-                                <span class="plagiarism-highlight plagiarism-level-1">Ít nguồn</span> →
-                                <span class="plagiarism-highlight plagiarism-level-10">Nhiều nguồn</span>
-                                (Click vào câu được highlight để xem nguồn)
+                                <span class="plagiarism-highlight plagiarism-level-1">Few sources</span> →
+                                <span class="plagiarism-highlight plagiarism-level-10">Many sources</span>
+                                (Click on the highlighted sentence to see the source)
                             </small>
                         </div>
 

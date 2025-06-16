@@ -31,7 +31,7 @@
         <form asp-action="Summarize" method="post">
             <input type="hidden" asp-for="EUID" />
             <button type="submit" class="btn btn-lg btn-primary p-2">
-                <i class="bi bi-lightbulb"></i> Tóm tắt nội dung
+                <i class="bi bi-lightbulb"></i> Summary
             </button>
         </form>
 
@@ -39,14 +39,14 @@
         <form asp-action="CheckPlagiarism" method="post">
             <input type="hidden" asp-for="EUID" />
             <button type="submit" class="btn btn-lg btn-danger p-2">
-                <i class="bi bi-shield-lock"></i> Kiểm tra đạo văn
+                <i class="bi bi-shield-lock"></i> Plagiarism Check
             </button>
         </form>
 
         <form asp-action="Duplicate" method="post">
             <input type="hidden" asp-for="EUID" />
             <button type="submit" class="btn btn-lg btn-success p-2">
-                <i class="bi bi-shield-lock"></i> Kiểm tra trùng lặp
+                <i class="bi bi-columns-gap"></i> Duplicate Check
             </button>
         </form>
 

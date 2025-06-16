@@ -28,11 +28,11 @@ namespace final.Models
         public string GetStatusText()
         {
             if (IsSubmitted)
-                return "Đã nộp";
+                return "Submited";
             else if (IsOverdue)
-                return "Quá hạn";
+                return "Out of Date";
             else
-                return "Chưa nộp";
+                return "Not yet";
         }
     }
 }

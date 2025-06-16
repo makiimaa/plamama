@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h4 class="mb-0">
-                            <i class="fas fa-search"></i> Kết quả kiểm tra đạo văn
+                            <i class="fas fa-search"></i> Plagiarism Check Results
                         </h4>
                     </div>
                     <div class="card-body">
@@ -24,7 +24,7 @@
                                 <div class="card bg-info text-white">
                                     <div class="card-body text-center">
                                         <h5>@totalSentences</h5>
-                                        <p class="mb-0">Tổng số câu</p>
+                                        <p class="mb-0">Total Sentences</p>
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                                 <div class="card bg-danger text-white">
                                     <div class="card-body text-center">
                                         <h5>@plagiarizedSentences</h5>
-                                        <p class="mb-0">Câu đạo văn</p>
+                                        <p class="mb-0">Plagiarized Sentences</p>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                 <div class="card bg-success text-white">
                                     <div class="card-body text-center">
                                         <h5>@(totalSentences - plagiarizedSentences)</h5>
-                                        <p class="mb-0">Câu gốc</p>
+                                        <p class="mb-0">Root Sentences</p>
                                     </div>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                                 <div class="card @(plagiarismRate > 50 ? "bg-danger" : plagiarismRate > 25 ? "bg-warning" : "bg-success") text-white">
                                     <div class="card-body text-center">
                                         <h5>@plagiarismRate.ToString("0.##")%</h5>
-                                        <p class="mb-0">Tỷ lệ đạo văn</p>
+                                        <p class="mb-0">Plagiarism Rate</p>
                                     </div>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
 
                         <!-- Progress bar -->
                         <div class="mb-4">
-                            <label class="form-label">Tỷ lệ đạo văn: @plagiarismRate.ToString("0.##")%</label>
+                            <label class="form-label">Plagiarism Rate: @plagiarismRate.ToString("0.##")%</label>
                             <div class="progress" style="height: 25px;">
                                 <div class="progress-bar @(plagiarismRate > 50 ? "bg-danger" : plagiarismRate > 25 ? "bg-warning" : "bg-success")" 
                                      role="progressbar" 
@@ -71,16 +71,16 @@
 
                         <!-- Chú thích màu sắc -->
                         <div class="mb-4">
-                            <h6>Chú thích:</h6>
+                            <h6>Notes:</h6>
                             <div class="d-flex flex-wrap gap-3">
                                 <span class="badge bg-success fs-6">
-                                    <i class="fas fa-check"></i> Câu gốc
+                                    <i class="fas fa-check"></i> Root Sentences
                                 </span>
                                 <span class="badge bg-warning fs-6">
-                                    <i class="fas fa-exclamation-triangle"></i> Có thể đạo văn (1-5 nguồn)
+                                    <i class="fas fa-exclamation-triangle"></i> Possible plagiarism (1-5 sources)
                                 </span>
                                 <span class="badge bg-danger fs-6">
-                                    <i class="fas fa-times"></i> Đạo văn cao (>5 nguồn)
+                                    <i class="fas fa-times"></i> High plagiarism (>5 sources)
                                 </span>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h6 class="mb-0">
-                                    <i class="fas fa-file-text"></i> Nội dung văn bản (Highlight câu đạo văn)
+                                    <i class="fas fa-file-text"></i> Text content (Highlight plagiarism sentence)
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -147,7 +147,7 @@
                             <div class="card mt-4">
                                 <div class="card-header">
                                     <h6 class="mb-0">
-                                        <i class="fas fa-list"></i> Chi tiết câu đạo văn
+                                        <i class="fas fa-list"></i> Details of plagiarism
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -165,7 +165,7 @@
                                                                 aria-expanded="false" 
                                                                 aria-controls="collapse@i">
                                                             <span class="badge @(item.matchCount > 5 ? "bg-danger" : "bg-warning") me-2">
-                                                                @item.matchCount nguồn
+                                                                @item.matchCount Sources
                                                             </span>
                                                             Câu @(i + 1): @(item.sentence.Length > 100 ? item.sentence.Substring(0, 100) + "..." : item.sentence)
                                                         </button>
@@ -176,11 +176,11 @@
                                                         <div class="accordion-body">
                                                             <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <h6>Nội dung câu:</h6>
+                                                                    <h6>Sentence Content:</h6>
                                                                     <p class="text-muted">@item.sentence</p>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <h6>Nguồn tham khảo (@item.urls.Count nguồn):</h6>
+                                                                    <h6>Reference Source (@item.urls.Count sources):</h6>
                                                                     @if (item.urls.Count > 0)
                                                                     {
                                                                         <ul class="list-unstyled">
@@ -197,7 +197,7 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        <p class="text-muted">Không có nguồn cụ thể.</p>
+                                                                        <p class="text-muted">No specific source.</p>
                                                                     }
                                                                 </div>
                                                             </div>
